@@ -1,9 +1,23 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+import os
 
-DATABASE_URL = "mysql+pymysql://root:Vennela%40123@localhost:3306/fastapi_db"
+MYSQL_USER = os.getenv("MYSQL_USER", "root")
+MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "123456")
+MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")
+MYSQL_PORT = os.getenv("MYSQL_PORT", "3366")
+MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "fastapi_db")
 
-engine = create_engine(DATABASE_URL)
+DATABASE_URL = (
+    f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}"
+    f"@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
+)
+
+engine = create_engine(
+    DATABASE_URL,
+    echo=True,
+    pool_pre_ping=True
+)
 
 SessionLocal = sessionmaker(
     autocommit=False,
